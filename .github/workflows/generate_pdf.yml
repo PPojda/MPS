@@ -1,0 +1,16 @@
+name: Generate PDF
+on: push
+jobs: 
+  build: 
+    runs-on: ubuntu-latest
+    steps: 
+      - run: pip install nbconvert pint matplotlib scipy ipykernel open_atmos_jupyter_utils
+      - uses: actions/checkout@v4
+      - run: sudo apt-get install pandoc texlive-xetex inkscape
+      - run: |
+          for file in **/*.ipynb; do
+            python -m nbconvert --to pdf --execute "$file"
+          done
+      - uses: actions/upload-artifact@v4
+        with:
+          path: '**/*.pdf'
