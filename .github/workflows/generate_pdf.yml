@@ -5,11 +5,12 @@ jobs:
     runs-on: ubuntu-latest
     steps: 
       - run: sudo apt-get update
-      - run: pip install nbconvert pint matplotlib scipy ipykernel open_atmos_jupyter_utils scikit-learn
+      - run: pip install nbconvert pint matplotlib scipy ipykernel open_atmos_jupyter_utils scikit-learn nbqa pylint
       - uses: actions/checkout@v4
       - run: sudo apt-get install pandoc texlive-xetex inkscape
       - run: |
           for file in **/*.ipynb; do
+            nbqa pylint "$file"
             python -m nbconvert --to pdf --execute "$file"
           done
       - uses: actions/upload-artifact@v4
